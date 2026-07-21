@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Petra.ai / IT Valley — Organização Azure</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  body { background: #0b1220; color: #e5e7eb; }
+  .card { background: #111827; border: 1px solid #1f2937; }
+  .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:600; white-space:nowrap; }
+  .p-petra    { background:#1e3a8a; color:#bfdbfe; }
+  .p-itvalley { background:#065f46; color:#a7f3d0; }
+  .p-phoenixx { background:#7c2d12; color:#fed7aa; }
+  .p-pessoal  { background:#581c87; color:#e9d5ff; }
+  .p-cobranca { background:#155e75; color:#a5f3fc; }
+  .p-confirmar{ background:#374151; color:#e5e7eb; }
+  .sku        { background:#1f2937; color:#cbd5e1; }
+  table { width:100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align:left; font-weight:600; color:#94a3b8; padding:8px; border-bottom:1px solid #1f2937; position:sticky; top:0; background:#111827; z-index: 5; }
+  td { padding:6px 8px; border-bottom:1px solid #1f2937; vertical-align: top; }
+  tr:hover td { background:#0f172a; }
+  code { background:#0f172a; padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+  .tab-btn { padding:8px 14px; border-radius:8px; cursor:pointer; color:#94a3b8; font-weight:600; transition: all 0.15s; }
+  .tab-btn:hover { color:#fff; }
+  .tab-btn.active { background:#1e3a8a; color:#fff; }
+  .filter-input { background:#0f172a; border:1px solid #1f2937; padding:8px 12px; border-radius:8px; color:#e5e7eb; font-size:13px; min-width:200px; }
+  .filter-input:focus { outline:2px solid #1e3a8a; }
+  select.filter-input { padding-right:32px; }
+</style>
+</head>
+<body class="min-h-screen">
+<div class="max-w-[1500px] mx-auto px-6 py-8">
+  <header class="flex items-center justify-between mb-8 flex-wrap gap-4">
+    <div>
+      <h1 class="text-3xl font-bold tracking-tight">Petra.ai / IT Valley — Organização Azure</h1>
+      <p class="text-slate-400 mt-1">Snapshot <strong class="text-emerald-300">2026-07-21</strong> via <code>az</code> · 94 web apps · 11 plans (4 pagos + 7 Free) · <strong class="text-emerald-300">zero P0v3</strong></p>
+      <p class="text-slate-500 text-xs mt-1">← <a href="index.html" class="text-blue-300 underline">voltar pros docs do SDK petraplatform</a></p>
+    </div>
+    <div class="text-right text-sm text-slate-400">
+      <div>Subscription: <code>Pago pelo Uso</code></div>
+      <div>Compute estimado: <strong class="text-emerald-300">~US$156/mês</strong> <span class="text-slate-500">(era ~US$300 em maio)</span></div>
+    </div>
+  </header>
+
+  <!-- KPIs -->
+  <section class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
+    <div class="card rounded-xl p-4"><div class="text-slate-400 text-xs">Web Apps</div><div class="text-3xl font-bold mt-1">94</div></div>
+    <div class="card rounded-xl p-4"><div class="text-slate-400 text-xs">Plans (pagos / free)</div><div class="text-3xl font-bold mt-1">4 / 7</div><div class="text-xs text-emerald-300 mt-1">era 15 em maio</div></div>
+    <div class="card rounded-xl p-4"><div class="text-slate-400 text-xs">P0v3 (caros)</div><div class="text-3xl font-bold mt-1 text-emerald-300">0</div><div class="text-xs text-slate-500 mt-1">eram 3</div></div>
+    <div class="card rounded-xl p-4"><div class="text-slate-400 text-xs">SQL Servers / DBs</div><div class="text-3xl font-bold mt-1">1 / 2</div><div class="text-xs text-slate-500 mt-1">srvmasterclass · Basic</div></div>
+    <div class="card rounded-xl p-4"><div class="text-slate-400 text-xs">Service Bus</div><div class="text-3xl font-bold mt-1">1</div><div class="text-xs text-slate-500 mt-1">genesisitvalley Std</div></div>
+    <div class="card rounded-xl p-4"><div class="text-slate-400 text-xs">Compute /mês</div><div class="text-3xl font-bold mt-1 text-emerald-300">~$156</div><div class="text-xs text-slate-500 mt-1">USD estimado por SKU</div></div>
+  </section>
+
+  <!-- Tabs -->
+  <nav class="flex gap-2 flex-wrap mb-6">
+    <button class="tab-btn active" data-tab="apps">Todos os Apps (94)</button>
+    <button class="tab-btn" data-tab="planos">Plans (11)</button>
+    <button class="tab-btn" data-tab="custo">Custo estimado</button>
+    <button class="tab-btn" data-tab="petra">Suite Petra</button>
+    <button class="tab-btn" data-tab="dados">Bancos & Mongo</button>
+    <button class="tab-btn" data-tab="historico">Histórico</button>
+  </nav>
+
+  <!-- TODOS OS APPS -->
+  <section data-pane="apps">
+    <div class="card rounded-xl overflow-hidden">
+      <div class="p-4 border-b border-slate-800 flex flex-wrap gap-3 items-center">
+        <input id="f-search" type="text" placeholder="🔍 buscar nome..." class="filter-input flex-1">
+        <select id="f-categoria" class="filter-input">
+          <option value="">Todas as categorias</option>
+          <option>Petra</option>
+          <option>IT Valley</option>
+          <option>PHOENIXX</option>
+          <option>Pessoal</option>
+          <option>Cobrança</option>
+          <option>Confirmar</option>
+        </select>
+        <select id="f-plano" class="filter-input">
+          <option value="">Todos os plans</option>
+        </select>
+        <span id="counter" class="text-sm text-slate-400 ml-auto"></span>
+      </div>
+      <div class="overflow-x-auto" style="max-height: 75vh;">
+      <table>
+        <thead>
+          <tr><th>App</th><th>Categoria</th><th>Produto/Função</th><th>Plan</th><th>Região</th></tr>
+        </thead>
+        <tbody id="apps-body"></tbody>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANS -->
+  <section data-pane="planos" class="hidden card rounded-xl overflow-hidden">
+    <div class="p-4 border-b border-slate-800">
+      <h2 class="text-lg font-semibold">App Service Plans (11)</h2>
+      <p class="text-slate-400 text-sm">Modelo consolidado: 4 plans pagos (2×B2 + 2×B3) + 7 plans F1 grátis com os apps leves distribuídos.</p>
+    </div>
+    <div class="overflow-x-auto">
+    <table>
+      <thead>
+        <tr><th>Plan</th><th>SKU</th><th>Apps</th><th>Região</th><th>RG</th><th>~US$/mês</th><th>Função</th></tr>
+      </thead>
+      <tbody id="planos-body"></tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- CUSTO -->
+  <section data-pane="custo" class="hidden">
+    <div class="card rounded-xl p-6 mb-4">
+      <h2 class="text-lg font-semibold mb-2">Custo estimado por SKU — 2026-07-21</h2>
+      <p class="text-slate-400 text-sm mb-4">Estimativa por preço de tabela (Linux, pay-as-you-go). Não inclui rede/backup/IA tokens. Mongo Atlas é billing separado (Marketplace).</p>
+      <table>
+        <thead><tr><th>Serviço</th><th>~US$/mês</th><th>Onde está</th></tr></thead>
+        <tbody id="custo-body"></tbody>
+      </table>
+      <div class="mt-4 text-sm">
+        <div>Total infra estimado: <strong class="text-emerald-300">~US$ 200/mês</strong> <span class="text-slate-500">(maio era ~US$ 300 real MTD)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUITE PETRA -->
+  <section data-pane="petra" class="hidden">
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="card rounded-xl p-4">
+        <h2 class="text-lg font-semibold mb-2">Suite Petra — 5 produtos</h2>
+        <p class="text-sm text-slate-400 mb-3">Aura/Nexo/Prism/Pulse foram <strong>substituídos</strong>.</p>
+        <ul class="space-y-2 text-sm">
+          <li><span class="pill p-petra">genesis</span> CRM IA WhatsApp/SMS — brain do ecossistema</li>
+          <li><span class="pill p-petra">quanto</span> Quoting conversacional (era FlowQuote)</li>
+          <li><span class="pill p-petra">vitrine</span> Carrosséis/posts (era Carrossel-AI)</li>
+          <li><span class="pill p-petra">polaris</span> Reels/Shorts (era Social-Media-AI)</li>
+          <li><span class="pill p-petra">calenda</span> Qualif + agenda WA (era forms)</li>
+        </ul>
+        <p class="text-xs text-slate-500 mt-3">Genesis hoje: PROD em <code>plan-prod-canada</code> (backendd + frontend + worker-webhooks), ACCP em F1, DEV em <code>plan-petra-dev</code> (B2).</p>
+      </div>
+      <div class="card rounded-xl p-4">
+        <h2 class="text-lg font-semibold mb-2">Pacotes comerciais</h2>
+        <table class="text-sm">
+          <thead><tr><th>Pacote</th><th>Inclui</th><th>$/mês</th></tr></thead>
+          <tbody>
+            <tr><td>Atrair (01)</td><td>vitrine + polaris</td><td>$79</td></tr>
+            <tr><td>Captar (02) ⭐</td><td>quanto + calenda</td><td>$169</td></tr>
+            <tr><td>Relacionar (03)</td><td>genesis</td><td>$497</td></tr>
+            <tr><td>Fidelizar (04)</td><td>todos os 5</td><td>$697</td></tr>
+          </tbody>
+        </table>
+        <p class="text-xs text-slate-500 mt-3">Domínio corporativo em uso: <code>petrasuite.ai</code> (ACS email <code>mail.petrasuite.ai</code> no <code>rg-petra</code>).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANCOS -->
+  <section data-pane="dados" class="hidden">
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="card rounded-xl p-4">
+        <h2 class="text-lg font-semibold mb-2">SQL Server — consolidado em 1 servidor</h2>
+        <table class="text-sm">
+          <thead><tr><th>Server</th><th>Banco</th><th>SKU</th><th>Quem usa</th></tr></thead>
+          <tbody>
+            <tr><td><code>srvmasterclass</code></td><td><code>dblumina</code></td><td>Basic</td><td><code>app-petra-api</code>, <code>genesisbackendd</code></td></tr>
+            <tr><td><code>srvmasterclass</code></td><td><code>dbmasterclasse</code></td><td>Basic</td><td>masterclass legacy</td></tr>
+          </tbody>
+        </table>
+        <p class="text-xs text-amber-300 mt-3">⚠️ Alvo multi-tenant: schema <code>platform.*</code> + RLS entram aqui (banco <code>dbpetra</code> a criar quando implementarmos o multi-tenant — mesmo servidor, custo Basic ~US$5).</p>
+        <p class="text-xs text-slate-500 mt-2">Subscription 2 (Paiement à l'utilisation) ainda tem 5 SQL servers legados de BI/School — candidatos a revisão.</p>
+      </div>
+      <div class="card rounded-xl p-4">
+        <h2 class="text-lg font-semibold mb-2">MongoDB Atlas + Service Bus</h2>
+        <ul class="text-sm space-y-2 text-slate-300">
+          <li>✅ <strong>MongoDB Atlas</strong> real (<code>cluster1.x6tirkw.mongodb.net</code>) usado pelo <code>app-petra-api</code> — conforme decisão "Atlas, não Cosmos".</li>
+          <li>✅ <strong>Service Bus</strong>: 1 namespace <code>genesisitvalley</code> (Standard) — Genesis usa via <code>AZURE_SERVICE_BUS_CONNECTION_STRING</code>.</li>
+          <li>📧 <strong>ACS Email</strong>: <code>rg-petra</code> com <code>email-petra</code> + <code>acs-petra</code> + domínio <code>mail.petrasuite.ai</code>.</li>
+          <li>🗄️ MySQL <code>mysql-phoenixx</code> — WordPress da PHOENIXX Academy (mantém).</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTÓRICO -->
+  <section data-pane="historico" class="hidden card rounded-xl p-6 space-y-4 text-sm">
+    <h2 class="text-lg font-semibold">Linha do tempo da consolidação</h2>
+    <div>
+      <h3 class="font-semibold text-amber-300">2026-05-14 — Limpeza inicial</h3>
+      <p class="text-slate-300 mt-1">20 deleções (zumbis, Evolution stack, teste-apagar, TaskDemand legacy). 50/76 apps movidos. Economia ~US$40/mês.</p>
+    </div>
+    <div>
+      <h3 class="font-semibold text-amber-300">2026-05-16 — Consolidação de plans (15 → 10)</h3>
+      <p class="text-slate-300 mt-1">Apagados plans Windows P0v3/B1, F1 zumbis, RG vazio. Migração itvalley-portal + ITValleySchool pra Linux. Economia ~US$77/mês.</p>
+    </div>
+    <div>
+      <h3 class="font-semibold text-emerald-300">2026-07-21 — Estado atual (esta página)</h3>
+      <p class="text-slate-300 mt-1">Nova rodada de barateamento feita pelo Carlos: <strong>zero P0v3</strong>, apenas 4 plans pagos (plan-prod-eastus B2, plan-petra-dev B2, plan-itvalley-nonprod B3, plan-prod-canada B3) + 7 F1 (plan-free-canada-1..5, plan-free-eastus, plan-free-bifamilia). SQL consolidado em <code>srvmasterclass</code> com bancos Basic. Compute caiu de ~US$300 pra ~US$156/mês.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+const APPS = [
+  // ===== Petra =====
+  {n:"app-petra-api", cat:"Petra", prod:"Petra API (Mongo Atlas + dblumina)", plan:"plan-prod-eastus", loc:"East US"},
+  {n:"app-petra-web", cat:"Petra", prod:"site/app Petra", plan:"plan-prod-eastus", loc:"East US"},
+  {n:"sitepetra", cat:"Petra", prod:"site institucional", plan:"plan-free-canada-4", loc:"Canada Central"},
+  {n:"app-ecossistema-petra", cat:"Petra", prod:"catálogo (5 produtos)", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"app-petraplatform-docs", cat:"Petra", prod:"docs SDK petraplatform (este site)", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"genesisbackendd", cat:"Petra", prod:"genesis PROD backend", plan:"plan-prod-canada", loc:"Canada Central"},
+  {n:"genesisfrontend", cat:"Petra", prod:"genesis PROD frontend", plan:"plan-prod-canada", loc:"Canada Central"},
+  {n:"worker-genesis-webhooks", cat:"Petra", prod:"genesis worker webhooks PROD", plan:"plan-prod-canada", loc:"Canada Central"},
+  {n:"app-genesis-backend-accp", cat:"Petra", prod:"genesis ACCP backend", plan:"plan-free-canada-2", loc:"Canada Central"},
+  {n:"app-genesis-frontend-accp", cat:"Petra", prod:"genesis ACCP frontend", plan:"plan-free-canada-2", loc:"Canada Central"},
+  {n:"petra-genesisBackend-dev", cat:"Petra", prod:"genesis DEV backend", plan:"plan-petra-dev", loc:"Canada Central"},
+  {n:"petra-genesisFrontend-dev", cat:"Petra", prod:"genesis DEV frontend", plan:"plan-petra-dev", loc:"Canada Central"},
+  {n:"flowquote-itvalley", cat:"Petra", prod:"quanto (ex-FlowQuote)", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"totalelectrique", cat:"Petra", prod:"quanto — cliente CA pagante", plan:"plan-prod-canada", loc:"Canada Central"},
+  {n:"totalelectrique-api", cat:"Petra", prod:"quanto — cliente CA (API)", plan:"plan-prod-canada", loc:"Canada Central"},
+  {n:"app-carrossel-backend", cat:"Petra", prod:"vitrine backend", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"app-carrossel-frontend", cat:"Petra", prod:"vitrine frontend", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"app-social-media-api", cat:"Petra", prod:"polaris API", plan:"plan-free-canada-3", loc:"Canada Central"},
+  {n:"app-social-media-web", cat:"Petra", prod:"polaris web", plan:"plan-free-canada-3", loc:"Canada Central"},
+  {n:"formsitvalleybackend", cat:"Petra", prod:"calenda backend (ex-forms)", plan:"plan-prod-canada", loc:"Canada Central"},
+  {n:"formsitvalleyfrontend", cat:"Petra", prod:"calenda frontend", plan:"plan-prod-canada", loc:"Canada Central"},
+  {n:"prospector-qc-web", cat:"Petra", prod:"prospector Quebec web", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"prospector-qc-api", cat:"Petra", prod:"prospector Quebec API", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+
+  // ===== IT Valley =====
+  {n:"app-itvalley-backend", cat:"IT Valley", prod:"TaskDemand PROD backend", plan:"plan-prod-eastus", loc:"East US"},
+  {n:"app-itvalley-client", cat:"IT Valley", prod:"TaskDemand PROD client", plan:"plan-prod-eastus", loc:"East US"},
+  {n:"app-itvalley-enterprise", cat:"IT Valley", prod:"TaskDemand PROD enterprise", plan:"plan-prod-eastus", loc:"East US"},
+  {n:"bi-finances-itvalley", cat:"IT Valley", prod:"BI finanças", plan:"plan-prod-eastus", loc:"East US"},
+  {n:"app-taskdemand", cat:"IT Valley", prod:"⚠️ DNS-lock: taskdemand.itvalleyschool.com aponta pra cá", plan:"plan-prod-canada", loc:"Canada Central"},
+  {n:"messaging-service-itvalley-prod", cat:"IT Valley", prod:"messaging service PROD", plan:"plan-prod-canada", loc:"Canada Central"},
+  {n:"app-messaging-service-accp", cat:"IT Valley", prod:"messaging service ACCP", plan:"plan-free-canada-3", loc:"Canada Central"},
+  {n:"ITValleySchool", cat:"IT Valley", prod:"site institucional (boasvindas.itvalleyschool.com)", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"itvalley-portal", cat:"IT Valley", prod:"portal interno", plan:"plan-free-canada-4", loc:"Canada Central"},
+  {n:"skillsync-api", cat:"IT Valley", prod:"SkillSync API", plan:"plan-free-canada-4", loc:"Canada Central"},
+  {n:"skillsync-app", cat:"IT Valley", prod:"SkillSync app", plan:"plan-free-canada-4", loc:"Canada Central"},
+  {n:"backend-skillsync", cat:"IT Valley", prod:"SkillSync backend", plan:"plan-free-canada-3", loc:"Canada Central"},
+  {n:"sdritvalley", cat:"IT Valley", prod:"SDR IA", plan:"plan-free-canada-4", loc:"Canada Central"},
+  {n:"sdr-agent-pydantic", cat:"IT Valley", prod:"SDR pydantic agent", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"servico-whatsapp-api2", cat:"IT Valley", prod:"WhatsApp API", plan:"plan-free-canada-2", loc:"Canada Central"},
+  {n:"servico-whatsapp-worker2", cat:"IT Valley", prod:"WhatsApp worker", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"app-whatppitvalley", cat:"IT Valley", prod:"WhatsApp", plan:"plan-free-canada-1", loc:"Canada Central"},
+  {n:"webhook-voomp-member", cat:"IT Valley", prod:"webhook Voomp/curso", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"n8n-itvalleyschool", cat:"IT Valley", prod:"n8n automação", plan:"plan-free-canada-3", loc:"Canada Central"},
+  {n:"app-orion-itvalley", cat:"IT Valley", prod:"Orion", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"orionsdkdocs", cat:"IT Valley", prod:"Orion SDK docs", plan:"plan-free-canada-3", loc:"Canada Central"},
+  {n:"app-bi-gp-itvalley", cat:"IT Valley", prod:"BI gestão de projetos", plan:"plan-free-canada-2", loc:"Canada Central"},
+  {n:"app-bi-docs-itvalley", cat:"IT Valley", prod:"BI docs", plan:"plan-free-canada-2", loc:"Canada Central"},
+  {n:"API-ac-pipedrive", cat:"IT Valley", prod:"integração Pipedrive", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"pitch-ia-automacao", cat:"IT Valley", prod:"pitch alunos (automação)", plan:"plan-free-canada-4", loc:"Canada Central"},
+  {n:"pitch-eng-dados", cat:"IT Valley", prod:"pitch alunos (eng dados)", plan:"plan-free-canada-4", loc:"Canada Central"},
+  {n:"pitch-ia-ml", cat:"IT Valley", prod:"pitch alunos (ML)", plan:"plan-free-canada-4", loc:"Canada Central"},
+  {n:"app-tcc-frontend", cat:"IT Valley", prod:"TCC pós", plan:"plan-free-canada-3", loc:"Canada Central"},
+  {n:"app-tcc-backend", cat:"IT Valley", prod:"TCC pós", plan:"plan-free-canada-3", loc:"Canada Central"},
+  {n:"itvalley-sistema-metricas-laura-backend", cat:"IT Valley", prod:"métricas Laura GP backend", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"itvalley-sistema-metricas-laura-frontend", cat:"IT Valley", prod:"métricas Laura GP frontend", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"app-itvalleyplatform-docs", cat:"IT Valley", prod:"docs itvalleyplatform (dashboard antigo)", plan:"plan-free-canada-4", loc:"Canada Central"},
+  {n:"app-gpexport-frontend", cat:"IT Valley", prod:"GPExport (memória: não investir)", plan:"plan-free-canada-1", loc:"Canada Central"},
+
+  // ===== PHOENIXX =====
+  {n:"phoenixx-solutions", cat:"PHOENIXX", prod:"site phoenixx", plan:"plan-free-eastus", loc:"East US"},
+  {n:"phoenixx-academy-wp", cat:"PHOENIXX", prod:"Academy WordPress (mysql-phoenixx)", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"app-pardiagnostic-backend", cat:"PHOENIXX", prod:"PAR diagnóstico backend", plan:"plan-free-canada-5", loc:"Canada Central"},
+  {n:"app-pardiagnostic-frontend", cat:"PHOENIXX", prod:"PAR diagnóstico frontend", plan:"plan-free-canada-5", loc:"Canada Central"},
+  {n:"par-slides", cat:"PHOENIXX", prod:"PAR slides FR", plan:"plan-free-canada-5", loc:"Canada Central"},
+  {n:"metodoparfrontend", cat:"PHOENIXX", prod:"método PAR", plan:"plan-free-canada-5", loc:"Canada Central"},
+  {n:"app-phoennix-forms-frontend", cat:"PHOENIXX", prod:"PHX forms frontend", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"app-phoennix-forms-backend", cat:"PHOENIXX", prod:"PHX forms backend", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"prospector-phoenixx-web", cat:"PHOENIXX", prod:"prospector PHX web", plan:"plan-free-canada-5", loc:"Canada Central"},
+  {n:"prospector-phoenixx-api", cat:"PHOENIXX", prod:"prospector PHX API", plan:"plan-free-canada-5", loc:"Canada Central"},
+
+  // ===== Pessoal =====
+  {n:"app-metodovinci-backend", cat:"Pessoal", prod:"Método Vinci backend", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"app-metodovinci-frontend", cat:"Pessoal", prod:"Método Vinci frontend", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"app-sendnotificationcarlos", cat:"Pessoal", prod:"notificações pessoais", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"ellagame", cat:"Pessoal", prod:"jogo (Ella)", plan:"plan-free-canada-5", loc:"Canada Central"},
+  {n:"rg-klaus-backend", cat:"Pessoal", prod:"Klaus backend", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"bi-familia-carlos", cat:"Pessoal", prod:"BI família", plan:"plan-free-bifamilia", loc:"Canada Central"},
+
+  // ===== Cobrança =====
+  {n:"app-api-cob-staging", cat:"Cobrança", prod:"sistema cobrança API (staging)", plan:"plan-free-canada-5", loc:"Canada Central"},
+  {n:"app-envio-worker-cob-staging", cat:"Cobrança", prod:"cobrança envio worker", plan:"plan-free-canada-2", loc:"Canada Central"},
+  {n:"app-evento-worker-cob-staging", cat:"Cobrança", prod:"cobrança evento worker", plan:"plan-free-canada-2", loc:"Canada Central"},
+
+  // ===== Confirmar =====
+  {n:"app-ai-teams-backend-prod", cat:"Confirmar", prod:"AI Teams PROD (Genesis consome via AI_TEAMS_API_URL)", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"app-ai-teams-backend-accp", cat:"Confirmar", prod:"AI Teams ACCP backend", plan:"plan-free-canada-5", loc:"Canada Central"},
+  {n:"app-ai-teams-frontend-accp", cat:"Confirmar", prod:"AI Teams ACCP frontend", plan:"plan-free-canada-5", loc:"Canada Central"},
+  {n:"employeevirtual", cat:"Confirmar", prod:"EmployeeVirtual — vivo?", plan:"plan-free-canada-1", loc:"Canada Central"},
+  {n:"app-employevirtuelitvalley", cat:"Confirmar", prod:"EmployeeVirtual FR", plan:"plan-free-canada-1", loc:"Canada Central"},
+  {n:"wflow", cat:"Confirmar", prod:"workflow tool?", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+  {n:"agentezerosetebackend", cat:"Confirmar", prod:"agente 07 backend", plan:"plan-free-canada-1", loc:"Canada Central"},
+  {n:"agentezerosetefrontend", cat:"Confirmar", prod:"agente 07 frontend", plan:"plan-free-canada-1", loc:"Canada Central"},
+  {n:"lvpublishing-api", cat:"Confirmar", prod:"LV Publishing (usa lvpublising-mongodb em rg-database)", plan:"plan-free-canada-2", loc:"Canada Central"},
+  {n:"back-sync", cat:"Confirmar", prod:"sync backend?", plan:"plan-free-canada-1", loc:"Canada Central"},
+  {n:"frotasia", cat:"Confirmar", prod:"frota IA — cliente real?", plan:"plan-free-canada-2", loc:"Canada Central"},
+  {n:"app-vectordb-ia", cat:"Confirmar", prod:"vector DB compartilhado", plan:"plan-free-canada-1", loc:"Canada Central"},
+  {n:"dashboarddatamartfrontend", cat:"Confirmar", prod:"dashboard datamart frontend", plan:"plan-free-canada-1", loc:"Canada Central"},
+  {n:"dashboarddatamartbackend", cat:"Confirmar", prod:"dashboard datamart backend", plan:"plan-free-canada-1", loc:"Canada Central"},
+  {n:"app-lumen-backend-accp", cat:"Confirmar", prod:"Lumen ACCP backend (rg-lumen)", plan:"plan-free-canada-2", loc:"Canada Central"},
+  {n:"app-lumen-frontend-accp", cat:"Confirmar", prod:"Lumen ACCP frontend", plan:"plan-free-canada-3", loc:"Canada Central"},
+  {n:"app-nutriai-api", cat:"Confirmar", prod:"NutriAI API", plan:"plan-free-canada-3", loc:"Canada Central"},
+  {n:"aula-make", cat:"Confirmar", prod:"aula Make (educacional?)", plan:"plan-free-canada-5", loc:"Canada Central"},
+  {n:"guide-canadien", cat:"Confirmar", prod:"Guide Canadien", plan:"plan-itvalley-nonprod", loc:"Canada Central"},
+];
+
+const PLANOS = [
+  {name:"plan-prod-eastus", sku:"B2", sites:6, loc:"East US", rg:"rg-webapps", custo:26, obs:"PROD East US — Petra API/Web + TaskDemand"},
+  {name:"plan-prod-canada", sku:"B3", sites:9, loc:"Canada Central", rg:"rg-webapps", custo:52, obs:"PROD Canada — Genesis, Calenda, clientes pagantes"},
+  {name:"plan-itvalley-nonprod", sku:"B3", sites:25, loc:"Canada Central", rg:"rg-webapps", custo:52, obs:"NONPROD geral — dev/accp/tools"},
+  {name:"plan-petra-dev", sku:"B2", sites:2, loc:"Canada Central", rg:"rg-webapps", custo:26, obs:"Genesis DEV"},
+  {name:"plan-free-canada-1", sku:"F1", sites:10, loc:"Canada Central", rg:"rg-webapps", custo:0, obs:"apps leves"},
+  {name:"plan-free-canada-2", sku:"F1", sites:10, loc:"Canada Central", rg:"rg-webapps", custo:0, obs:"apps leves"},
+  {name:"plan-free-canada-3", sku:"F1", sites:10, loc:"Canada Central", rg:"rg-webapps", custo:0, obs:"apps leves"},
+  {name:"plan-free-canada-4", sku:"F1", sites:9, loc:"Canada Central", rg:"rg-webapps", custo:0, obs:"apps leves"},
+  {name:"plan-free-canada-5", sku:"F1", sites:11, loc:"Canada Central", rg:"rg-webapps", custo:0, obs:"apps leves"},
+  {name:"plan-free-eastus", sku:"F1", sites:1, loc:"East US", rg:"rg-webapps", custo:0, obs:"phoenixx-solutions"},
+  {name:"plan-free-bifamilia", sku:"F1", sites:1, loc:"Canada Central", rg:"rg-bi-familia", custo:0, obs:"BI família"},
+];
+
+const CUSTO = [
+  {svc:"App Service Plans (2×B2 + 2×B3)", usd:156, onde:"plan-prod-eastus, plan-petra-dev, plan-prod-canada, plan-itvalley-nonprod"},
+  {svc:"SQL Database (2× Basic)", usd:10, onde:"srvmasterclass: dblumina + dbmasterclasse"},
+  {svc:"MySQL flexible (B1ms)", usd:14, onde:"mysql-phoenixx (PHOENIXX Academy WP)"},
+  {svc:"Service Bus Standard", usd:10, onde:"genesisitvalley"},
+  {svc:"Storage / DNS / misc", usd:12, onde:"contas espalhadas — candidatas a limpeza"},
+  {svc:"ACS Email", usd:1, onde:"acs-petra + mail.petrasuite.ai (pay-per-email)"},
+  {svc:"MongoDB Atlas", usd:0, onde:"billing separado (Marketplace) — cluster1.x6tirkw"},
+];
+
+function renderApps() {
+  const search = document.getElementById("f-search").value.toLowerCase();
+  const cat = document.getElementById("f-categoria").value;
+  const plano = document.getElementById("f-plano").value;
+  const filtered = APPS.filter(a => {
+    if (search && !a.n.toLowerCase().includes(search) && !a.prod.toLowerCase().includes(search)) return false;
+    if (cat && a.cat !== cat) return false;
+    if (plano && a.plan !== plano) return false;
+    return true;
+  });
+  document.getElementById("counter").textContent = `${filtered.length} de ${APPS.length} apps`;
+  const catClass = {"Petra":"p-petra","IT Valley":"p-itvalley","PHOENIXX":"p-phoenixx","Pessoal":"p-pessoal","Cobrança":"p-cobranca","Confirmar":"p-confirmar"};
+  document.getElementById("apps-body").innerHTML = filtered.map(a => `<tr>
+    <td><code>${a.n}</code></td>
+    <td><span class="pill ${catClass[a.cat]}">${a.cat}</span></td>
+    <td class="text-slate-300">${a.prod}</td>
+    <td class="text-xs"><code>${a.plan}</code></td>
+    <td class="text-xs">${a.loc === "East US" ? "🟠 East US" : a.loc}</td>
+  </tr>`).join("");
+}
+
+const planoSet = [...new Set(APPS.map(a => a.plan))].sort();
+const planoSelect = document.getElementById("f-plano");
+planoSet.forEach(p => { const o = document.createElement("option"); o.value = p; o.textContent = p; planoSelect.appendChild(o); });
+["f-search","f-categoria","f-plano"].forEach(id => document.getElementById(id).addEventListener("input", renderApps));
+renderApps();
+
+document.getElementById("planos-body").innerHTML = PLANOS.map(p => `<tr>
+  <td><strong>${p.name}</strong></td>
+  <td><span class="pill sku">${p.sku}</span></td>
+  <td>${p.sites}</td>
+  <td>${p.loc === "East US" ? "🟠 East US" : p.loc}</td>
+  <td><code class="text-xs">${p.rg}</code></td>
+  <td>${p.custo ? "$" + p.custo : "—"}</td>
+  <td class="text-xs text-slate-400">${p.obs}</td>
+</tr>`).join("");
+
+document.getElementById("custo-body").innerHTML = CUSTO.map(c => `<tr>
+  <td>${c.svc}</td>
+  <td>~$${c.usd}</td>
+  <td class="text-slate-400 text-xs">${c.onde}</td>
+</tr>`).join("");
+
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const t = btn.dataset.tab;
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b === btn));
+    document.querySelectorAll("[data-pane]").forEach(p => p.classList.toggle("hidden", p.dataset.pane !== t));
+  });
+});
+</script>
+</body>
+</html>

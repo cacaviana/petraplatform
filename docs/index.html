@@ -46,6 +46,7 @@
             <button class="nav-group-header" aria-expanded="false">🏢 Petra Sistemas</button>
             <div class="nav-group-content">
                 <a href="#azure-visao">Visão da arquitetura Azure</a>
+                <a href="dashboard.html">📊 Dashboard Azure (inventário vivo)</a>
                 <a href="#azure-ambientes">Ambientes (NONPROD / PROD)</a>
                 <a href="#azure-componentes">Frontend / Backend / Worker</a>
                 <a href="#azure-eventbus">Service Bus e eventos</a>
@@ -922,12 +923,18 @@ flowchart LR
     <h2>Arquitetura Azure da Petra — visão</h2>
     <p>
         O ecossistema Petra (5 produtos: Genesis, Quanto, Vitrine, Polaris, Calenda)
-        roda inteiro no Azure. Esta seção documenta o <strong>desenho-alvo</strong> —
-        nem todos os recursos existem hoje; é o que vai sendo provisionado conforme cada
-        produto vai pra produção.
+        roda inteiro no Azure. Inventário completo e atualizado:
+        <a href="dashboard.html"><strong>📊 Dashboard Azure</strong></a>.
     </p>
     <div class="callout">
-        <strong>Princípio:</strong> 2 ilhas físicas (NONPROD e PROD) com 3 ambientes
+        <strong>Estado atual (consolidação 2026-07):</strong> depois de 3 rodadas de
+        limpeza (maio→julho), a plataforma roda em <strong>11 plans</strong> —
+        4 pagos (2×B2 + 2×B3, <strong>zero P0v3</strong>) + 7 F1 grátis.
+        Compute caiu de ~US$300 pra <strong>~US$156/mês</strong>.
+        SQL consolidado em 1 servidor (<code>srvmasterclass</code>) com bancos Basic.
+    </div>
+    <div class="callout">
+        <strong>Princípio (mantido):</strong> 2 ilhas físicas (NONPROD e PROD) com 3 ambientes
         lógicos (DEV, ACCP, PROD). Cada ambiente tem isolamento por banco, prefixo de
         storage e fila — mas DEV+ACCP compartilham plan e Service Bus pra economizar.
     </div>
@@ -935,12 +942,27 @@ flowchart LR
 
 <section id="azure-ambientes">
     <h2>Ambientes — NONPROD vs PROD</h2>
+    <h3>Estado atual (2026-07-21, verificado via <code>az</code>)</h3>
     <table>
         <thead>
             <tr><th>Recurso</th><th>NONPROD (DEV + ACCP)</th><th>PROD</th></tr>
         </thead>
         <tbody>
-            <tr><td>Plan</td><td><code>plan-petra-nonprod</code> (B2/B3, compartilhado)</td><td><code>plan-petra-prod</code> (P0v3)</td></tr>
+            <tr><td>Plans pagos</td><td><code>plan-itvalley-nonprod</code> (B3, 25 apps) + <code>plan-petra-dev</code> (B2, Genesis DEV)</td><td><code>plan-prod-canada</code> (B3, 9 apps) + <code>plan-prod-eastus</code> (B2, 6 apps)</td></tr>
+            <tr><td>Plans grátis</td><td colspan="2"><code>plan-free-canada-1..5</code> + <code>plan-free-eastus</code> + <code>plan-free-bifamilia</code> (F1) — apps leves, ACCP e ferramentas</td></tr>
+            <tr><td>SQL Server</td><td colspan="2"><code>srvmasterclass</code> (único) — <code>dblumina</code> (Petra API + Genesis) e <code>dbmasterclasse</code>, ambos Basic</td></tr>
+            <tr><td>Service Bus</td><td colspan="2"><code>genesisitvalley</code> Standard (único namespace)</td></tr>
+            <tr><td>MongoDB</td><td colspan="2">Atlas real — <code>cluster1.x6tirkw.mongodb.net</code> (não Cosmos ✅)</td></tr>
+            <tr><td>Email</td><td colspan="2">ACS <code>acs-petra</code> + domínio <code>mail.petrasuite.ai</code> (rg-petra)</td></tr>
+        </tbody>
+    </table>
+    <h3>Desenho-alvo (quando os produtos escalarem)</h3>
+    <table>
+        <thead>
+            <tr><th>Recurso</th><th>NONPROD (DEV + ACCP)</th><th>PROD</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Plan</td><td><code>plan-petra-nonprod</code> (B2/B3, compartilhado)</td><td><code>plan-petra-prod</code> (P0v3 só quando o volume justificar)</td></tr>
             <tr><td>SQL Server</td><td><code>srv-petra-nonprod</code> — bancos por ambiente (<code>dbgenesis-dev</code>, <code>dbgenesis-accp</code>)</td><td><code>srv-petra-prod</code></td></tr>
             <tr><td>Service Bus</td><td><code>sb-petra-nonprod</code> Standard — queues sufixadas <code>.dev</code> / <code>.accp</code></td><td><code>sb-petra-prod</code> — queues <code>.prod</code></td></tr>
             <tr><td>Redis</td><td>Sem Redis em NONPROD (cache em memória)</td><td><code>redis-petra-prod</code> Standard C1</td></tr>
@@ -1034,24 +1056,24 @@ dlpetraprod/ (ADLS Gen2 — analytics)
 </section>
 
 <section id="azure-custo">
-    <h2>Custo estimado (CAD/mês)</h2>
+    <h2>Custo — estado atual (2026-07-21)</h2>
+    <p>Depois da consolidação (zero P0v3, SQL num servidor só, bancos Basic):</p>
     <table>
         <thead>
-            <tr><th>Recurso</th><th>NONPROD</th><th>PROD</th></tr>
+            <tr><th>Serviço</th><th>~US$/mês</th><th>Onde</th></tr>
         </thead>
         <tbody>
-            <tr><td>App Service Plan</td><td>~$35 (B2)</td><td>~$110 (P0v3)</td></tr>
-            <tr><td>Static Web Apps</td><td>$0 Free</td><td>~$25 Standard</td></tr>
-            <tr><td>SQL (Basic 5DTU em NONPROD)</td><td>~$60 (6 dbs)</td><td>~$180 (6 dbs S1)</td></tr>
-            <tr><td>Redis</td><td>$0</td><td>~$110</td></tr>
-            <tr><td>Service Bus Standard</td><td>~$15</td><td>~$15</td></tr>
-            <tr><td>Storage</td><td>~$15</td><td>~$80</td></tr>
-            <tr><td>Azure OpenAI (pay-per-token)</td><td>~$50</td><td>~$250</td></tr>
-            <tr><td><strong>Subtotal</strong></td><td><strong>~$175</strong></td><td><strong>~$770</strong></td></tr>
+            <tr><td>App Service Plans (2×B2 + 2×B3)</td><td>~$156</td><td><code>plan-prod-eastus</code>, <code>plan-petra-dev</code>, <code>plan-prod-canada</code>, <code>plan-itvalley-nonprod</code></td></tr>
+            <tr><td>SQL Database (2× Basic)</td><td>~$10</td><td><code>srvmasterclass</code></td></tr>
+            <tr><td>MySQL flexible</td><td>~$14</td><td><code>mysql-phoenixx</code> (Academy WP)</td></tr>
+            <tr><td>Service Bus Standard</td><td>~$10</td><td><code>genesisitvalley</code></td></tr>
+            <tr><td>Storage / DNS / misc</td><td>~$12</td><td>contas espalhadas — candidatas a limpeza</td></tr>
+            <tr><td><strong>Total infra</strong></td><td><strong>~US$ 200</strong></td><td>≈ CAD$ 270 — era ~CAD$ 405 em maio</td></tr>
         </tbody>
     </table>
-    <p><strong>Total estimado: ~$945 CAD/mês</strong> para os 3 ambientes completos. Custos
-        reais variam com volume de IA tokens, storage usado e tráfego.</p>
+    <p>MongoDB Atlas e tokens de IA (Anthropic/OpenAI/Groq) são billing separado e
+        variam com uso. O desenho-alvo antigo (~$945 CAD/mês com P0v3 + Redis + 12 bancos)
+        fica como referência de escala futura — só provisionar quando o volume pagar a conta.</p>
 </section>
 
 <!-- ===================================================================== -->
