@@ -57,6 +57,13 @@
         </div>
 
         <div class="nav-group">
+            <button class="nav-group-header" aria-expanded="false">🚀 Suíte em produção</button>
+            <div class="nav-group-content">
+                <a href="#suite-producao">Estado implantado (23/jul/2026)</a>
+            </div>
+        </div>
+
+        <div class="nav-group">
             <button class="nav-group-header" aria-expanded="false">🔀 GitHub &amp; Branches</button>
             <div class="nav-group-content">
                 <a href="#git-repos">Estrutura de repos</a>
@@ -1074,6 +1081,130 @@ dlpetraprod/ (ADLS Gen2 — analytics)
     <p>MongoDB Atlas e tokens de IA (Anthropic/OpenAI/Groq) são billing separado e
         variam com uso. O desenho-alvo antigo (~$945 CAD/mês com P0v3 + Redis + 12 bancos)
         fica como referência de escala futura — só provisionar quando o volume pagar a conta.</p>
+</section>
+
+<!-- ===================================================================== -->
+<!-- ===== CATEGORIA: SUÍTE EM PRODUÇÃO                                ===== -->
+<!-- ===================================================================== -->
+
+<section id="suite-producao">
+    <h2>Suíte em produção — estado implantado (23/jul/2026)</h2>
+    <p class="lead">
+        A Petra Suite está no ar: portal único em
+        <a href="https://suite.petrasuite.ai">suite.petrasuite.ai</a> com login
+        contra o <code>dbpetra</code> (schema <code>platform.*</code>) e SSO por
+        cookie no domínio pai <code>.petrasuite.ai</code>. Abaixo, o que está
+        realmente implantado — não o desenho-alvo.
+    </p>
+
+    <h3>Portal da suíte</h3>
+    <ul>
+        <li><strong>URL:</strong> <a href="https://suite.petrasuite.ai">https://suite.petrasuite.ai</a></li>
+        <li><strong>Repo:</strong> <code>cacaviana/petra-suite-portal</code></li>
+        <li><strong>Apps Azure:</strong> <code>app-petra-suite-web</code> (frontend) e <code>app-petra-suite-api</code> (backend), ambos no <code>plan-prod-canada</code></li>
+        <li><strong>Identidade:</strong> login único contra <code>dbpetra</code> / schema <code>platform.*</code> no <code>srvmasterclass</code> — as 8 tabelas já estão criadas e seedadas</li>
+    </ul>
+
+    <h3>Tenants e produtos (seed)</h3>
+    <table>
+        <thead>
+            <tr><th>Tenant</th><th>Tipo</th><th>Usuários</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>petra</code></td><td>master</td><td>carlos.viana, henrique.proscholdt</td></tr>
+            <tr><td><code>itvalley</code></td><td>cliente</td><td>laura.lopes</td></tr>
+            <tr><td><code>totalelectrique</code></td><td>cliente</td><td>hugo.matias</td></tr>
+        </tbody>
+    </table>
+    <p>
+        Produtos cadastrados: <code>genesis</code>, <code>quanto</code>,
+        <code>vitrine</code>, <code>polaris</code>, <code>calenda</code> —
+        cada um com 2 permissions (<code>view</code> / <code>admin</code>).
+    </p>
+
+    <h3>SSO — cookie <code>petra_sso</code></h3>
+    <p>
+        No login, o portal grava o cookie <code>petra_sso</code> no domínio pai
+        <code>.petrasuite.ai</code> (<code>Max-Age</code> 8h, <code>Secure</code>,
+        <code>SameSite=Lax</code>). Cada produto lê o cookie e entra
+        <strong>sem segunda tela de login</strong>. O backend de cada produto valida
+        o JWT com a mesma <code>JWT_SECRET_KEY</code>
+        (<code>petra-jwt-secret-key</code> no Key Vault).
+    </p>
+    <div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant P as suite.petrasuite.ai
+    participant C as Cookie .petrasuite.ai
+    participant A as quanto / calenda / polaris
+    participant B as Backend do produto
+
+    U->>P: login (email + senha)
+    P->>P: valida contra dbpetra platform.*
+    P->>C: Set-Cookie petra_sso (Max-Age 8h, Secure, SameSite=Lax)
+    U->>A: abre quanto.petrasuite.ai
+    A->>C: lê petra_sso (mesmo domínio pai)
+    A->>A: auto-login, sem segunda tela
+    A->>B: request + Bearer JWT
+    B->>B: valida JWT (mesma JWT_SECRET_KEY petra-jwt-secret-key do Key Vault)
+    B-->>U: sessão ativa em todos os produtos
+    </div>
+
+    <h3>Status por produto</h3>
+    <table>
+        <thead>
+            <tr><th>Produto</th><th>Status</th><th>Detalhe</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Calenda</strong> (Forms)</td>
+                <td>Multitenant em PROD</td>
+                <td>Tenant vem do JWT; dados existentes marcados <code>itvalley</code></td>
+            </tr>
+            <tr>
+                <td><strong>Polaris</strong></td>
+                <td>Multitenant em PROD</td>
+                <td><code>dblumina</code> schema <code>social_media</code> + Mongo, colunas <code>tenant_id</code></td>
+            </tr>
+            <tr>
+                <td><strong>Quanto</strong> (FlowQuote)</td>
+                <td>Multitenant em PROD</td>
+                <td>Backend novo <code>app-quanto-api</code>, db <code>flowquote-itvalley</code>; dados do TE marcados <code>totalelectrique</code> no db <code>flowquote</code>; TE v1 intocado</td>
+            </tr>
+            <tr>
+                <td><strong>Genesis</strong></td>
+                <td>Híbrido</td>
+                <td>Aceita token da suíte + login local; ACCP validado, PROD em deploy</td>
+            </tr>
+            <tr>
+                <td><strong>Vitrine</strong></td>
+                <td>Bloqueado por coordenação</td>
+                <td>Main da Polly tem auth/Tenant CRUD próprios — integração pendente</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Domínios <code>*.petrasuite.ai</code></h3>
+    <table>
+        <thead>
+            <tr><th>Domínio</th><th>App Azure</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>suite.petrasuite.ai</code></td><td><code>app-petra-suite-web</code></td></tr>
+            <tr><td><code>suite-api.petrasuite.ai</code></td><td><code>app-petra-suite-api</code></td></tr>
+            <tr><td><code>genesis.petrasuite.ai</code></td><td><code>genesisfrontend</code></td></tr>
+            <tr><td><code>quanto.petrasuite.ai</code></td><td><code>flowquote-itvalley</code></td></tr>
+            <tr><td><code>vitrine.petrasuite.ai</code></td><td><code>app-carrossel-frontend</code></td></tr>
+            <tr><td><code>polaris.petrasuite.ai</code></td><td><code>app-social-media-web</code></td></tr>
+            <tr><td><code>calenda.petrasuite.ai</code></td><td><code>formsitvalleyfrontend</code></td></tr>
+            <tr><td><code>docs.petrasuite.ai</code></td><td><code>app-petraplatform-docs</code></td></tr>
+        </tbody>
+    </table>
+    <div class="callout">
+        Todos os domínios acima têm <strong>managed certificate</strong> do
+        Azure App Service (HTTPS automático, renovação gerenciada).
+    </div>
 </section>
 
 <!-- ===================================================================== -->
