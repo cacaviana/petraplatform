@@ -17,6 +17,14 @@
   .p-cobranca { background:#155e75; color:#a5f3fc; }
   .p-confirmar{ background:#374151; color:#e5e7eb; }
   .sku        { background:#1f2937; color:#cbd5e1; }
+  .s-ok   { background:#064e3b; color:#6ee7b7; }
+  .s-warn { background:#78350f; color:#fcd34d; }
+  .s-pend { background:#374151; color:#cbd5e1; }
+  .s-freeze { background:#450a0a; color:#fca5a5; }
+  a.site-link { color:#93c5fd; text-decoration:none; }
+  a.site-link:hover { text-decoration:underline; }
+  a.repo-link { color:#94a3b8; text-decoration:none; }
+  a.repo-link:hover { color:#e5e7eb; text-decoration:underline; }
   table { width:100%; border-collapse: collapse; font-size: 13px; }
   th { text-align:left; font-weight:600; color:#94a3b8; padding:8px; border-bottom:1px solid #1f2937; position:sticky; top:0; background:#111827; z-index: 5; }
   td { padding:6px 8px; border-bottom:1px solid #1f2937; vertical-align: top; }
@@ -57,6 +65,7 @@
   <!-- Tabs -->
   <nav class="flex gap-2 flex-wrap mb-6">
     <button class="tab-btn active" data-tab="apps">Todos os Apps (94)</button>
+    <button class="tab-btn" data-tab="sites">🗺️ Mapa de sites</button>
     <button class="tab-btn" data-tab="planos">Plans (11)</button>
     <button class="tab-btn" data-tab="custo">Custo estimado</button>
     <button class="tab-btn" data-tab="petra">Suite Petra</button>
@@ -91,6 +100,180 @@
         <tbody id="apps-body"></tbody>
       </table>
       </div>
+    </div>
+  </section>
+
+  <!-- MAPA DE SITES -->
+  <section data-pane="sites" class="hidden space-y-4" id="sites">
+    <div class="card rounded-xl p-5">
+      <h2 class="text-xl font-semibold">🗺️ Organização dos sites — quem é quem, e onde</h2>
+      <p class="text-slate-400 text-sm mt-1">Catálogo dos sites em produção: URL pública, App Service no Azure, repositório no GitHub e status de integração com a identidade única da Petra Suite. Atualizado em <strong class="text-emerald-300">2026-07-23</strong>.</p>
+    </div>
+
+    <!-- Petra Suite -->
+    <div class="card rounded-xl overflow-hidden">
+      <div class="p-4 border-b border-slate-800">
+        <h3 class="text-lg font-semibold"><span class="pill p-petra">Petra Suite</span> Produção — <code>*.petrasuite.ai</code></h3>
+        <p class="text-slate-400 text-sm mt-1">Todos atrás do portal/login único (<code>suite.petrasuite.ai</code>), identidade em <code>dbpetra</code>.</p>
+      </div>
+      <div class="overflow-x-auto">
+      <table>
+        <thead><tr><th>Site</th><th>Produto / Função</th><th>App Azure</th><th>Repo GitHub</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><a class="site-link" href="https://suite.petrasuite.ai" target="_blank">suite.petrasuite.ai</a></td>
+            <td class="text-slate-300">Portal / login único da suíte</td>
+            <td><code>app-petra-suite-web</code></td>
+            <td><a class="repo-link" href="https://github.com/cacaviana/petra-suite-portal" target="_blank">cacaviana/petra-suite-portal</a></td>
+            <td><span class="pill s-ok">SSO ativo</span></td>
+          </tr>
+          <tr>
+            <td><a class="site-link" href="https://suite-api.petrasuite.ai" target="_blank">suite-api.petrasuite.ai</a></td>
+            <td class="text-slate-300">API de identidade (tenants, users, produtos)</td>
+            <td><code>app-petra-suite-api</code></td>
+            <td><a class="repo-link" href="https://github.com/cacaviana/petra-suite-portal" target="_blank">cacaviana/petra-suite-portal</a></td>
+            <td><span class="pill s-ok">SSO ativo</span></td>
+          </tr>
+          <tr>
+            <td><a class="site-link" href="https://genesis.petrasuite.ai" target="_blank">genesis.petrasuite.ai</a></td>
+            <td class="text-slate-300">Genesis — CRM IA WhatsApp/SMS</td>
+            <td><code>genesisfrontend</code></td>
+            <td><a class="repo-link" href="https://github.com/ITValley-School/projetogenesis" target="_blank">ITValley-School/projetogenesis</a></td>
+            <td><span class="pill s-warn">híbrido — SSO no frontend em rollout</span></td>
+          </tr>
+          <tr>
+            <td><a class="site-link" href="https://quanto.petrasuite.ai" target="_blank">quanto.petrasuite.ai</a></td>
+            <td class="text-slate-300">Quanto — quoting conversacional (ex-FlowQuote)</td>
+            <td><code>flowquote-itvalley</code> + <code>app-quanto-api</code></td>
+            <td><a class="repo-link" href="https://github.com/cacaviana/frontendSvelteFlow" target="_blank">cacaviana/frontendSvelteFlow</a></td>
+            <td><span class="pill s-ok">multitenant PROD</span></td>
+          </tr>
+          <tr>
+            <td><a class="site-link" href="https://calenda.petrasuite.ai" target="_blank">calenda.petrasuite.ai</a></td>
+            <td class="text-slate-300">Calenda — qualificação + agenda (ex-Forms). Atende também <a class="site-link" href="https://forms.itvalleyschool.com" target="_blank">forms.itvalleyschool.com</a></td>
+            <td><code>formsitvalleyfrontend</code> / <code>formsitvalleybackend</code></td>
+            <td><a class="repo-link" href="https://github.com/cacaviana/Form-It-Valley" target="_blank">cacaviana/Form-It-Valley</a></td>
+            <td><span class="pill s-ok">multitenant PROD</span></td>
+          </tr>
+          <tr>
+            <td><a class="site-link" href="https://polaris.petrasuite.ai" target="_blank">polaris.petrasuite.ai</a></td>
+            <td class="text-slate-300">Polaris — Reels/Shorts IA</td>
+            <td><code>app-social-media-web</code> / <code>app-social-media-api</code></td>
+            <td><a class="repo-link" href="https://github.com/cacaviana/social-media-ai" target="_blank">cacaviana/social-media-ai</a></td>
+            <td><span class="pill s-ok">multitenant PROD</span></td>
+          </tr>
+          <tr>
+            <td><a class="site-link" href="https://vitrine.petrasuite.ai" target="_blank">vitrine.petrasuite.ai</a></td>
+            <td class="text-slate-300">Vitrine — carrosséis/posts</td>
+            <td><code>app-carrossel-frontend</code> / <code>app-carrossel-backend</code></td>
+            <td><a class="repo-link" href="https://github.com/cacaviana/carrossel" target="_blank">cacaviana/carrossel</a></td>
+            <td><span class="pill s-pend">integração pendente (auth da Polly)</span></td>
+          </tr>
+          <tr>
+            <td><a class="site-link" href="https://docs.petrasuite.ai" target="_blank">docs.petrasuite.ai</a></td>
+            <td class="text-slate-300">Esta documentação + dashboards</td>
+            <td><code>app-petraplatform-docs</code></td>
+            <td><a class="repo-link" href="https://github.com/cacaviana/petraplatform" target="_blank">cacaviana/petraplatform</a></td>
+            <td><span class="pill s-ok">no ar</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- Total Electrique -->
+    <div class="card rounded-xl overflow-hidden">
+      <div class="p-4 border-b border-slate-800">
+        <h3 class="text-lg font-semibold"><span class="pill p-cobranca">Cliente</span> Total Electrique — v1 (a migrar para o Quanto)</h3>
+        <p class="text-amber-300 text-sm mt-1">⚠️ Cliente pagante na versão v1 do FlowQuote. <strong>INTOCADO até a virada</strong> pro Quanto multitenant — nenhum deploy/mudança nesses apps sem plano de migração.</p>
+      </div>
+      <div class="overflow-x-auto">
+      <table>
+        <thead><tr><th>Site</th><th>Produto / Função</th><th>App Azure</th><th>Repo GitHub</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><a class="site-link" href="https://totalelectrique.azurewebsites.net" target="_blank">totalelectrique.azurewebsites.net</a></td>
+            <td class="text-slate-300">FlowQuote v1 — frontend do cliente</td>
+            <td><code>totalelectrique</code></td>
+            <td><a class="repo-link" href="https://github.com/ITValley-School/totalelectrique-front" target="_blank">ITValley-School/totalelectrique-front</a></td>
+            <td><span class="pill s-freeze">INTOCADO até a virada</span></td>
+          </tr>
+          <tr>
+            <td><span class="text-slate-300">totalelectrique-api</span></td>
+            <td class="text-slate-300">FlowQuote v1 — API do cliente</td>
+            <td><code>totalelectrique-api</code></td>
+            <td><a class="repo-link" href="https://github.com/ITValley-School/totalelectrique-backend" target="_blank">ITValley-School/totalelectrique-backend</a></td>
+            <td><span class="pill s-freeze">INTOCADO até a virada</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- IT Valley -->
+    <div class="card rounded-xl overflow-hidden">
+      <div class="p-4 border-b border-slate-800">
+        <h3 class="text-lg font-semibold"><span class="pill p-itvalley">IT Valley</span> Fora da suíte — mesma identidade no futuro</h3>
+        <p class="text-slate-400 text-sm mt-1">Apps da escola/operação IT Valley. Plano: convergir para a mesma identidade da suíte (<code>dbpetra</code>) numa fase futura.</p>
+      </div>
+      <div class="overflow-x-auto">
+      <table>
+        <thead><tr><th>Site</th><th>Produto / Função</th><th>App Azure</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><a class="site-link" href="https://itvalley-portal.azurewebsites.net" target="_blank">itvalley-portal.azurewebsites.net</a></td>
+            <td class="text-slate-300">Catálogo antigo de sistemas (lento)</td>
+            <td><code>itvalley-portal</code></td>
+            <td><span class="pill s-pend">será substituído por esta página</span></td>
+          </tr>
+          <tr>
+            <td><a class="site-link" href="https://app-itvalley-client.azurewebsites.net" target="_blank">app-itvalley-client</a></td>
+            <td class="text-slate-300">TaskDemand — portal de alunos</td>
+            <td><code>app-itvalley-client</code></td>
+            <td><span class="pill s-ok">PROD</span></td>
+          </tr>
+          <tr>
+            <td><a class="site-link" href="https://app-itvalley-enterprise.azurewebsites.net" target="_blank">app-itvalley-enterprise</a></td>
+            <td class="text-slate-300">TaskDemand — portal de empresas</td>
+            <td><code>app-itvalley-enterprise</code></td>
+            <td><span class="pill s-ok">PROD</span></td>
+          </tr>
+          <tr>
+            <td><span class="text-slate-300">app-itvalley-backend</span></td>
+            <td class="text-slate-300">TaskDemand — backend</td>
+            <td><code>app-itvalley-backend</code></td>
+            <td><span class="pill s-ok">PROD</span></td>
+          </tr>
+          <tr>
+            <td><a class="site-link" href="https://taskdemand.itvalleyschool.com" target="_blank">taskdemand.itvalleyschool.com</a></td>
+            <td class="text-slate-300">TaskDemand legacy — ⚠️ DNS-lock aponta pra cá</td>
+            <td><code>app-taskdemand</code></td>
+            <td><span class="pill s-warn">legacy / DNS-lock</span></td>
+          </tr>
+          <tr>
+            <td><a class="site-link" href="https://formsphoenixx.azurewebsites.net" target="_blank">formsphoenixx</a></td>
+            <td class="text-slate-300">Forms da PHOENIXX</td>
+            <td><code>formsphoenixx</code></td>
+            <td><span class="pill s-ok">PROD (PHOENIXX)</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- Infra compartilhada -->
+    <div class="card rounded-xl p-4">
+      <h3 class="text-lg font-semibold mb-2">🧱 Infra compartilhada</h3>
+      <table class="text-sm">
+        <thead><tr><th>Recurso</th><th>Nome</th><th>Função</th></tr></thead>
+        <tbody>
+          <tr><td>SQL Server</td><td><code>srvmasterclass</code></td><td class="text-slate-300">bancos <code>dbpetra</code> (identidade da suíte), <code>dblumina</code> e <code>dbmasterclasse</code></td></tr>
+          <tr><td>Service Bus</td><td><code>genesisitvalley</code></td><td class="text-slate-300">eventos/filas do Genesis e mensageria</td></tr>
+          <tr><td>Key Vault</td><td><code>kv-api-key-itvalley</code></td><td class="text-slate-300">chaves de API centralizadas (OpenAI, Anthropic, etc.)</td></tr>
+          <tr><td>Mongo Atlas</td><td><code>cluster1</code></td><td class="text-slate-300">dados operacionais (Quanto, Polaris, Vitrine, Calenda…)</td></tr>
+          <tr><td>Storage</td><td><code>sapetralakehouse</code></td><td class="text-slate-300">lakehouse + backups em <code>/backups</code></td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
@@ -377,13 +560,20 @@ document.getElementById("custo-body").innerHTML = CUSTO.map(c => `<tr>
   <td class="text-slate-400 text-xs">${c.onde}</td>
 </tr>`).join("");
 
+function activateTab(t, updateHash) {
+  const btn = document.querySelector(`.tab-btn[data-tab="${t}"]`);
+  if (!btn) return;
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b === btn));
+  document.querySelectorAll("[data-pane]").forEach(p => p.classList.toggle("hidden", p.dataset.pane !== t));
+  if (updateHash) history.replaceState(null, "", "#" + t);
+}
 document.querySelectorAll(".tab-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const t = btn.dataset.tab;
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b === btn));
-    document.querySelectorAll("[data-pane]").forEach(p => p.classList.toggle("hidden", p.dataset.pane !== t));
-  });
+  btn.addEventListener("click", () => activateTab(btn.dataset.tab, true));
 });
+// deep-link: dashboard.html#sites, #planos, #custo...
+const hashTab = location.hash.replace("#", "");
+if (hashTab) activateTab(hashTab, false);
+window.addEventListener("hashchange", () => activateTab(location.hash.replace("#", ""), false));
 </script>
 </body>
 </html>
